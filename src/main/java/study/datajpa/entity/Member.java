@@ -1,28 +1,42 @@
 package study.datajpa.entity;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 @Getter
 @Setter
-
+@NoArgsConstructor(access = AccessLevel.PROTECTED) //access 레벨 알아두기
+@ToString(of = {"id","username", "age"}) //team 적으면 안된다. 연관관계 문제생김
 public class Member {
 
     @Id @GeneratedValue //식별자인식, pk가 자동입력
+    @Column(name = "member_id")
     private  Long id;
     private  String username;
+    private int age;
 
-    protected Member(){
 
-    }//기본생성자 하나는 있어야한다.
-    public Member(String username){
+    @ManyToOne
+    @JoinColumn(name = "team_id")
+    private Team team;
+
+
+    public Member(String username, int age, Team team){
         this.username = username;
 
+        this. age  = age;
+        if(team !=null){
+            changeTeam(team);
+        }
+
+
+    }
+    //연관관계 세팅 메소드
+    public void changeTeam (Team team){
+        this.team = team;
+        team.getMembers().add(this);
     }
 
 }
