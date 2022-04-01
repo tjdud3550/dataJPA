@@ -7,6 +7,10 @@ import javax.persistence.*;
 @Entity
 @Getter
 @Setter
+@NamedQuery(
+        name="Member.findByUsername",
+        query="select m from Member m where m.username = :username")
+
 @NoArgsConstructor(access = AccessLevel.PROTECTED) //access 레벨 알아두기
 @ToString(of = {"id","username", "age"}) //team 적으면 안된다. 연관관계 문제생김
 public class Member {
